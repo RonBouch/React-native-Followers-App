@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import {View,Text,TouchableOpacity ,Image} from 'react-native'
-import ImagePicker from 'react-native-image-picker';
-import styles from '../Components/StyleSheet'
-import AddPost from '../Components/AddPost'
-import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage';
+
+import {View,Text,TouchableOpacity ,Image} from 'react-native'
+import styles from '../Components/StyleSheet'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux';
-import {getPosts} from '../Components/actions'
+import {getPosts,deletePost,addFollower} from '../Components/actions'
+import { ScrollView } from 'react-native-gesture-handler';
  class Home extends Component {
     constructor(props) {
         super(props);
@@ -24,176 +25,129 @@ import {getPosts} from '../Components/actions'
       try {
         const value =JSON.parse( await AsyncStorage.getItem("user"))
         if(value !== null) {
-        //   this.setState({
-        //     token:value.data.token
-        // })
         this.props.getPosts(value.data.token)
-        console.log("token - > ",value.data.token)
 
          }
 
       } catch(e) {
-        console.log("err async ",e)
       }
     }
-
-    GetPosts = (token) => {
-            fetch('https://moonsite-rn-follow-test.herokuapp.com/api/post/get-all-posts', {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                'Authorization': token
-                 },
-                 })
-                 .then((response) => response.json())
-                 .then(json => {
-                        if (json!=null) {
-                          
-                          console.log("all posts - >  ",json )
-                       
-                        } else {
-                            console.log("false")
-                        }
-                      })
-                     .catch(error => {
-                        console.error(error);
-                      });
-     }
-     GetMyPost = (token) => {
-         console.log("Token get my post - ",token)
-        fetch('https://moonsite-rn-follow-test.herokuapp.com/api/post/get-posts-by-user-id', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            'Authorization': token
-             },
-             })
-             .then((response) => response.json())
-             .then(json => {
-                    if (json!=null) {
-                      
-                      console.log("all my post - >  ",json )
-                   
-                    } else {
-                        console.log("false")
-                    }
-                  })
-                 .catch(error => {
-                    console.error(error);
-                  });
- }
-    AddPost = async(token,dataImg) => {
-                        const data = {
-                                title: "Ron-Post",
-                                image_url: dataImg
-                        };
-                        fetch('https://moonsite-rn-follow-test.herokuapp.com/api/post/add-post', {
-                         method: 'POST',
-                         headers: {
-                         Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-
-                         },
-                         body: JSON.stringify(data),
-                          })
-                          .then(res => {
-                            return res.json();
-                          })
-                          .then(
-                            result => {
-                            //   console.log("fetch POST= ", result);
-                              if (result.res != true) {
-                                console.log("faild post")
-                  
-                                return;
-                              } else {                
-                                  console.log("Add Post - >  " , result );
-                                  this.GetMyPost(token)
-                              }
-                            },
-                            error => {
-                              console.log("err post=", error);
-                            }
-                          );
-                        
-     };
-   async  UploadImg(token){
-         console.log("token from upload ", token)
-        let options = {
-            quality: 1.0,
-            maxWidth: 400,
-            maxHeight: 400,
-            storageOptions: {
-              skipBackup: true
-            }
-          };
-        ImagePicker.showImagePicker(options,(response) => {
-            // console.log('Response = ', response);
-           
-            if (response.didCancel) {
-              console.log('User cancelled image picker');
-            } else if (response.error) {
-              console.log('ImagePicker Error: ', response.error);
-            
-            } else {
-              const source = { uri: response.uri };
-            //   console.log('res img: ', response.uri);
-               const data ="data:"+response.type+";base64,"+response.data
-               this.AddPost(token,data)
-              // You can also display the image using data:
-              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-           
-              this.setState({
-                avatarSource: source,
-              });
-            }
-          });
-     }
      
     render() {
-        // console.log("props  ",this.props)
+      let Posts=[];
+      if(this.props.posts.fetched){
+      Posts = this.props.posts.posts.data.map((post, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.contributionView}
+            >
+              <View  style={styles.heartIconStyle}>
+              {post.user_id==this.props.user.data.user_id ? (
+                <TouchableOpacity onPress={() => this.props.deletePost(post.post_id,this.props.user.data.token)}>
+                 
+                    <Icon
+                      name="trash"
+                      type="font-awesome"
+                      size={22}
+                      color="red"
+                      raised
+                    />
+                   
+                </TouchableOpacity>
+                  ):
+                  <TouchableOpacity onPress={()=>this.props.addFollower(this.props.user.data.token,(post.user_id))}>
+                    {this.props.followers.followers!=null?this.props.followers.followers.data.filter(
+                    data => data.f_user_id == post.user_id
+                  ) != "" ? (
+                    <Icon
+                      name="user-plus"
+                      type="font-awesome"
+                      size={20}
+                      color="red"
+                      raised
+                    />
+                  ) : (
+                    <Icon
+                      name="user-plus"
+                      type="feather"
+                      size={20}
+                      color="black"
+                      raised
+                    />
+                  ):console.log("")}
+                   
+                  </TouchableOpacity>}
+
+              </View>
+              <View style={styles.viewImageStyle}>
+                <Image
+                  source={{uri:post.image_url}}
+                  style={styles.imageStyle}
+                />
+              </View>
+              <View  style={styles.viewDetails}>
+              <View style={styles.viewTitle} >
+              <Text style={styles.txtTitle}>{post.title}</Text>
+                </View>
+               
+              </View>
+            </TouchableOpacity>
+          );
+
+      });
+      }
         return (
             <View style={{alignItems:'center',flex:1}}>
-                <Text>
-                    hi home
+             <View style={{flexDirection:'row',justifyContent: "space-around",width:'100%',borderWidth: 3,padding:4}}>
+              <TouchableOpacity style={{alignItems:'center'}} onPress={()=>{this.props.navigation.navigate("AddPost")}}>
+              <Icon
+                      name="plus"
+                      type="feather"
+                      size={22}
+                      color="black"
+                      raised
+                    />
+                    <Text>
+                    Add Post
                 </Text>
-               {this.state.addPost?
-               <View>
-               <TouchableOpacity style={{backgroundColor:'red'}} 
-                onPress={() => this.setState({ addPost: false })}>
-                   <Text>
-                       X
-                   </Text>
-               </TouchableOpacity>
-               <AddPost/>
-               </View>
-               :console.log("..")}
-               <TouchableOpacity
-            onPress={() => this.setState({ addPost: true })}
-            style={styles.reminderTouch} >
-            <Image
-              source={require("../images/add-reminder.png")}
-              style={styles.reminderImg}
-            />
-          </TouchableOpacity>
+              </TouchableOpacity>
+              
+            <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate("Follower")}>
+              <Text>Following</Text>
+              <Text>{this.props.followers.fetched?this.props.followers.followers.data.length:0}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{alignItems:'center'}}  onPress={()=>this.props.navigation.navigate("Follower")}>
+              <Text>Followers</Text>
+              <Text>{this.props.myFollowers.fetched?this.props.myFollowers.followers.data.length:0}</Text>
+            </TouchableOpacity>
+            </View>
+                <ScrollView>
+                {Posts}
+
+                </ScrollView>
+         
             </View>
         )
     }
 }
 function mapStateToProps(state){
-  console.log("map ",state)
     return {
       user:state.LoginReducer.user,
-      posts:state.getPostReducer
+      posts:state.getPostReducer,
+      delete:state.deletePostReducer,
+      follower:state.addFollowerReducer,
+      followers:state.getFollowersByIDReducer,
+      myFollowers:state.getMyFollowersReducer,
+
     }
 }
 function mapDispatchToProps(dispatch){
     return {
-      getPosts:bindActionCreators(getPosts,dispatch)
-
+      getPosts:bindActionCreators(getPosts,dispatch),
+      deletePost:bindActionCreators(deletePost,dispatch),
+      addFollower:bindActionCreators(addFollower,dispatch)
+    
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Home);

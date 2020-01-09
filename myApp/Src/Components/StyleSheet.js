@@ -1,6 +1,59 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  //Cotnribution and Favorite and profilePost
+  contributionView:{
+    backgroundColor: "white",
+    width: "95%",
+    height: 210,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: "#e6e6fa",
+    elevation: 10
+   },
+   heartIconStyle:{
+    position: "absolute",
+    zIndex: 1,
+    margin: 5,
+    left: 2
+   },
+   imageStyle:{
+    width: "100%",
+    height: "100%",
+    borderTopLeftRadius: 100,
+    borderBottomRightRadius: 100
+   },
+   viewImageStyle:{
+    height: "70%"
+   },
+   viewDetails:{
+    justifyContent: "space-around",
+    flexDirection: "row-reverse",
+    height: "30%",
+    marginTop: 15
+   },
+   viewTitle:{
+    flexDirection: "column",
+    alignItems: "center"
+   },
+   txtTitle:{
+    fontSize: 20, 
+    color: "gray"
+   },
+   txtDetails:{
+    color: "#6495ed",
+    fontSize: 16
+   },
+   viewItems:{
+    flex: 1, 
+    alignItems: "center"
+   },
+   viewNoItems:{
+    flex: 1,
+     alignItems: "center",
+    justifyContent: "center"
+  },
+/// posts
 LoginRegisterSelected: {
     margin: 20,
     color: "rgb(196, 58, 37)",
@@ -22,9 +75,9 @@ LoginRegisterSelected: {
     textShadowRadius: 5
   },
   profileImage:{
-    height: 150,
-    width: 150,
-    borderRadius: 100,
+    height: 200,
+    width: 200,
+    borderRadius: 20,
     marginTop:20,
     padding:3
   },
@@ -41,7 +94,7 @@ LoginRegisterSelected: {
     width: 180,
     height: 40,
     alignItems: "center",
-    borderColor: "white",
+    borderColor: "black",
     borderBottomWidth: 1,
     marginTop: 10
   },
@@ -126,11 +179,11 @@ LoginRegisterSelected: {
   },
   loginView:{
     alignItems: "center",
-    backgroundColor:'blue',
     height:'100%',
   },
   txtInput:{
   width:"100%",
+  color:'black'
   },
   btnTxt:{
     fontWeight: "bold",
