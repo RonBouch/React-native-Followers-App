@@ -38,11 +38,11 @@ import { ScrollView } from 'react-native-gesture-handler';
       if(this.props.posts.fetched){
       Posts = this.props.posts.posts.data.map((post, index) => {
           return (
-            <TouchableOpacity
+            <View
               key={index}
-              style={styles.contributionView}
+              style={styles.postView}
             >
-              <View  style={styles.heartIconStyle}>
+              <View  style={styles.viewIconStyle}>
               {post.user_id==this.props.user.data.user_id ? (
                 <TouchableOpacity onPress={() => this.props.deletePost(post.post_id,this.props.user.data.token)}>
                  
@@ -86,21 +86,18 @@ import { ScrollView } from 'react-native-gesture-handler';
                   style={styles.imageStyle}
                 />
               </View>
-              <View  style={styles.viewDetails}>
               <View style={styles.viewTitle} >
-              <Text style={styles.txtTitle}>{post.title}</Text>
-                </View>
-               
+              <Text style={styles.txtTitle}>{post.title}</Text>               
               </View>
-            </TouchableOpacity>
+            </View>
           );
 
       });
       }
         return (
-            <View style={{alignItems:'center',flex:1}}>
-             <View style={{flexDirection:'row',justifyContent: "space-around",width:'100%',borderWidth: 3,padding:4}}>
-              <TouchableOpacity style={{alignItems:'center'}} onPress={()=>{this.props.navigation.navigate("AddPost")}}>
+            <View style={styles.container}>
+             <View style={styles.headerView}>
+              <TouchableOpacity style={styles.headerColumnView} onPress={()=>{this.props.navigation.navigate("AddPost")}}>
               <Icon
                       name="plus"
                       type="feather"
@@ -113,11 +110,11 @@ import { ScrollView } from 'react-native-gesture-handler';
                 </Text>
               </TouchableOpacity>
               
-            <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate("Follower")}>
+            <TouchableOpacity style={styles.headerColumnView} onPress={()=>this.props.navigation.navigate("Follower")}>
               <Text>Following</Text>
               <Text>{this.props.followers.fetched?this.props.followers.followers.data.length:0}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{alignItems:'center'}}  onPress={()=>this.props.navigation.navigate("Follower")}>
+            <TouchableOpacity style={styles.headerColumnView}  onPress={()=>this.props.navigation.navigate("Follower")}>
               <Text>Followers</Text>
               <Text>{this.props.myFollowers.fetched?this.props.myFollowers.followers.data.length:0}</Text>
             </TouchableOpacity>

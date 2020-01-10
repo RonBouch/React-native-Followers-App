@@ -73,8 +73,8 @@ import { bindActionCreators } from 'redux';
           }   
         }
         return (
-        <View style={styles.loginView}>
-        <Text style={{fontSize:20 ,color:'#9400d3',fontWeight: "bold",margin:10}}>
+        <View style={styles.container}>
+        <Text style={styles.headlineText}>
             Login
         </Text>
         <View style={styles.input}>
@@ -116,7 +116,7 @@ import { bindActionCreators } from 'redux';
           />
         </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={()=>this.FetchUser()}>
+        <TouchableOpacity style={styles.btnSumbit} onPress={()=>this.FetchUser()}>
           <Text style={styles.btnTxt}>
             Login{"  "}
           </Text>
@@ -129,7 +129,7 @@ import { bindActionCreators } from 'redux';
           :
           <Text style={styles.textMessage}>{this.props.user!=null&&!this.props.user.res?this.props.user.msg:""}</Text>
         }
-                <TouchableOpacity style={{marginTop:30,borderWidth:1}} onPress={()=>this.props.navigation.navigate("Register")}>
+                <TouchableOpacity style={styles.btnLoginRegister} onPress={()=>this.props.navigation.navigate("Register")}>
                     <Text>
                         To-Register 
                     </Text>

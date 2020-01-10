@@ -9,8 +9,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 function Item({follower}) 
 {
   return(
-    <View style={{margin:4}}>
-      <Text style={{color:'blue',fontSize:16}}>{follower.email}</Text>
+    <View style={styles.followersView}>
+      <Text style={styles.followersTxt}>{follower.email}</Text>
     </View>
   )
 }
@@ -35,7 +35,7 @@ function Item({follower})
                     />
                   </TouchableOpacity>
                  <View>
-                 <Text style={{fontSize:20 ,color:'#9400d3',fontWeight: "bold",margin:10}}>Following:</Text>
+                 <Text style={styles.headlineText}>Following:</Text>
                  {
                 this.props.followers.followers.data.length!=0?
                  <SafeAreaView>
@@ -50,7 +50,7 @@ function Item({follower})
                  }
                  </View>
                  <View>
-                 <Text style={{fontSize:20 ,color:'#9400d3',fontWeight: "bold",margin:10}}>Followers</Text>
+                 <Text  style={styles.headlineText}>Followers</Text>
               {
                 this.props.myFollowers.followers.data.length!=0?
                 <SafeAreaView>

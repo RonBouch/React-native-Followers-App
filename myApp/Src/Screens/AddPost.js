@@ -61,9 +61,7 @@ class AddPost extends Component {
      }
     render() {
         return (
-            <View style={{width:'100%',
-        }}>
-              
+            <View>
                 <View>
                   <TouchableOpacity onPress={()=>this.props.navigation.navigate("Home")}>
                   <Icon
@@ -75,7 +73,7 @@ class AddPost extends Component {
                     />
                   </TouchableOpacity>
                 </View>
-              <View style={{alignItems:'center'}}>
+              <View style={styles.container}>
               <View style={styles.input}>
          <TextInput
            placeholder="title"
@@ -87,19 +85,19 @@ class AddPost extends Component {
 
                 <TouchableOpacity onPress={()=>this.UploadImg()}>
                 {this.state.avatarSource != "" ? (
-                  <Image style={styles.profileImage}
+                  <Image style={styles.postImg}
                     source={this.state.avatarSource}
                   />
                 ) : (
                   <Image
-                    style={styles.profileImage}
+                    style={styles.postImg}
                     source={require('../images/camera.png')}
                   />
                 )}
                 </TouchableOpacity>
            <Text style={styles.textMessage}>{this.state.message}</Text>
 
-                <TouchableOpacity style={styles.loginButton} onPress={()=>this.HandleSubmit()} >
+                <TouchableOpacity style={styles.btnSumbit} onPress={()=>this.HandleSubmit()} >
           <Text style={styles.btnTxt}>
             UpLoad Image{"  "}
           </Text>
