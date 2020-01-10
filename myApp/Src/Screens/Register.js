@@ -22,31 +22,31 @@ import { bindActionCreators } from 'redux';
     storeData = async (key, value) => {
       try {
         await AsyncStorage.setItem(key, JSON.stringify(value));
-        this.props.navigation.navigate("Home")
+        this.props.navigation.navigate("Dashboard")
       } catch (e) {
         // saving error
       }
     }
     isValid(){
       if (this.state.email == "") {
-        this.setState({ message: "* אנא הכנס כתובת מייל" });
+        this.setState({  message: "*Please enter your Email-Address" });
         return false;
       } 
       if (this.state.email != "") {
         let pattern = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
         if (!pattern.test(this.state.email)) {
-          this.setState({ message: "* כתובת אימייל לא תקינה" });
+          this.setState({ message: "* You have entered an invalid Email Address. Please try again." });
           return false;
         }
       }
       if (this.state.password == "") {
-        this.setState({ message: "* אנא הכנס סיסמה" });
+        this.setState({ message: "* Enter your password" });
         return false ;
       }
       if (this.state.password != "") {
         let pattern = /^.{4,8}$/;
         if (!pattern.test(this.state.password)) {
-          this.setState({ message: "*סיסמה בין 4-8מספרים או אותיות" }); 
+          this.setState({ message: "*The Password field must be at least 4 characters"}); 
           return false;
         }
       }

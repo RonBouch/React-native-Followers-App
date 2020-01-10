@@ -16,36 +16,49 @@ import { bindActionCreators } from 'redux';
       message:"",
     }
   }
-  
+  componentDidMount(){
+    this.getData();
+  }
+  getData = async () => {
+    try {
+      const value =JSON.parse( await AsyncStorage.getItem("user"))
+      if(value !== null) {
+        if(value.data.token!=null){
+          this.props.login(value)
+          this.props.navigation.navigate("Dashboard")
+        }
+       }
+    } catch(e) {
+    }
+  }
     storeData = async (key, value) => {
       try {
-        console.log("value ",value)
         await AsyncStorage.setItem(key, JSON.stringify(value));
-        this.props.navigation.navigate("Home")
+        this.props.navigation.navigate("Dashboard")
       } catch (e) {
-        // saving error
+       console.log(e)
       }
     }
     isValid(){
       if (this.state.email == "") {
-        this.setState({ message: "* אנא הכנס כתובת מייל" });
+        this.setState({ message: "*Please enter your Email-Address" });
         return false;
       } 
       if (this.state.email != "") {
         let pattern = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
         if (!pattern.test(this.state.email)) {
-          this.setState({ message: "* כתובת אימייל לא תקינה" });
+          this.setState({ message: "* You have entered an invalid Email Address. Please try again." });
           return false;
         }
       }
       if (this.state.password == "") {
-        this.setState({ message: "* אנא הכנס סיסמה" });
+        this.setState({ message: "* Enter your password" });
         return false ;
       }
       if (this.state.password != "") {
         let pattern = /^.{4,8}$/;
         if (!pattern.test(this.state.password)) {
-          this.setState({ message: "*סיסמה בין 4-8מספרים או אותיות" }); 
+          this.setState({ message: "*The Password field must be at least 4 characters" }); 
           return false;
         }
       }
@@ -55,14 +68,14 @@ import { bindActionCreators } from 'redux';
       FetchUser= async()=>{
         if(this.isValid()){
 
-        const data = {
-          email: "asssss@yopmail.com",
-          password: "123456a"
-        };
         // const data = {
-        //   email: this.state.email,
-        //   password: this.state.password
+        //   email: "asssss@yopmail.com",
+        //   password: "123456a"
         // };
+        const data = {
+          email: this.state.email,
+          password: this.state.password
+        };
         await this.props.login(data)
       }
       }
@@ -142,7 +155,6 @@ import { bindActionCreators } from 'redux';
 }
 
 function mapStateToProps(state){
-  console.log("map ",state)
     return {
       user:state.LoginReducer.user,
     }

@@ -25,7 +25,7 @@ function Item({follower})
     
         return (
             <View>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Home")}>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Dashboard")}>
                   <Icon
                       name="arrow-left"
                       type="font-awesome"

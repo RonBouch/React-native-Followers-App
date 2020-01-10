@@ -10,7 +10,7 @@ export const FETCH_MY_FOLLOWERS='FETCH_MY_FOLLOWERS'
 
 export function login(data){
     return(dispatch)=>{
-        
+         if(data.res==undefined){
           fetch('https://moonsite-rn-follow-test.herokuapp.com/api/usr/login/', {
             method: 'POST',
             headers: {
@@ -29,6 +29,10 @@ export function login(data){
     .catch((err)=>{
         dispatch({type:"FETCH_LOGIN_REJECTED",payload:err})
     })
+}else{
+    dispatch({type:"FETCH_LOGIN",payload:data})
+
+}
     }}
 
     export function register(data){

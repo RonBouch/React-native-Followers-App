@@ -8,7 +8,8 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux';
 import {getPosts,deletePost,addFollower} from '../Components/actions'
 import { ScrollView } from 'react-native-gesture-handler';
- class Home extends Component {
+import LoginReducer from '../Components/reducers/LoginReducer';
+ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state={
@@ -21,12 +22,13 @@ import { ScrollView } from 'react-native-gesture-handler';
     componentDidMount(){
      this.getData();
     }
+    
     getData = async () => {
       try {
-        const value =JSON.parse( await AsyncStorage.getItem("user"))
-        if(value !== null) {
-        this.props.getPosts(value.data.token)
-
+       const user =JSON.parse( await AsyncStorage.getItem("user"))
+        if(user !== null) {
+         
+        this.props.getPosts(user.data.token)
          }
 
       } catch(e) {
@@ -34,9 +36,11 @@ import { ScrollView } from 'react-native-gesture-handler';
     }
      
     render() {
+
       let Posts=[];
       if(this.props.posts.fetched){
       Posts = this.props.posts.posts.data.map((post, index) => {
+
           return (
             <View
               key={index}
@@ -95,6 +99,7 @@ import { ScrollView } from 'react-native-gesture-handler';
       });
       }
         return (
+          
             <View style={styles.container}>
              <View style={styles.headerView}>
               <TouchableOpacity style={styles.headerColumnView} onPress={()=>{this.props.navigation.navigate("AddPost")}}>
@@ -143,8 +148,8 @@ function mapDispatchToProps(dispatch){
     return {
       getPosts:bindActionCreators(getPosts,dispatch),
       deletePost:bindActionCreators(deletePost,dispatch),
-      addFollower:bindActionCreators(addFollower,dispatch)
+      addFollower:bindActionCreators(addFollower,dispatch),
     
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Home);
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

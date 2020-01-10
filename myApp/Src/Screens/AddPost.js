@@ -16,7 +16,7 @@ class AddPost extends Component {
             message:""
         }
     }
-  
+    
    async  UploadImg(){
         let options = {
             quality: 1.0,
@@ -42,10 +42,10 @@ class AddPost extends Component {
      }
      isValid(){
       if (this.state.title == "") {
-        this.setState({ message: "* אנא הכנס כתובת משפט" });
+        this.setState({ message: "* Please enter your title." });
         return false;
       } else if (this.state.imgData == "") {
-        this.setState({ message: "* אנא הכנס תמונה" });
+        this.setState({ message: "* Choose Image file" });
         return false ;
       }
       return true; 
@@ -56,14 +56,30 @@ class AddPost extends Component {
             title:this.state.title,
             image_url:this.state.imgData
            }
-          await this.props.addPost(this.props.user.data.token,data)
+         await this.props.addPost(this.props.user.data.token,data)
           }
      }
+     componentDidUpdate() {
+      if(this.props.post.post){
+        if(this.props.post.post.res){
+          this.props.post.post = null; 
+          this.props.navigation.navigate("Dashboard")  
+        }else{
+          this.setState({message:"Something wrong!"})
+        }
+      }
+       
+    }
+
+      
+     
+    
     render() {
+     
         return (
             <View>
                 <View>
-                  <TouchableOpacity onPress={()=>this.props.navigation.navigate("Home")}>
+                  <TouchableOpacity onPress={()=>this.props.navigation.navigate("Dashboard")}>
                   <Icon
                       name="arrow-left"
                       type="font-awesome"
