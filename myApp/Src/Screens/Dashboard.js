@@ -29,6 +29,7 @@ import LoginReducer from '../Components/reducers/LoginReducer';
         if(user !== null) {
          
         this.props.getPosts(user.data.token)
+           
          }
 
       } catch(e) {

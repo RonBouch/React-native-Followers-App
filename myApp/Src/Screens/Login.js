@@ -68,10 +68,7 @@ import { bindActionCreators } from 'redux';
       FetchUser= async()=>{
         if(this.isValid()){
 
-        // const data = {
-        //   email: "asssss@yopmail.com",
-        //   password: "123456a"
-        // };
+        
         const data = {
           email: this.state.email,
           password: this.state.password
